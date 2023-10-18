@@ -108,7 +108,7 @@ export const SentFormJSX = () => {
                                 <div class="form-control w-full">
                                     <label for="randomName" class="cursor-pointer label">
                                         <span class="label-text">Nama bebas</span>
-                                        <input type="checkbox" onChange={(e) => setRandomCondition(Boolean(e.target.value))} checked={useRandomName()} class="checkbox checkbox-accent" />
+                                        <input type="checkbox" onChange={() => setRandomCondition(!useRandomName())} checked={useRandomName()} class="checkbox checkbox-accent" />
                                     </label>
                                 </div>
                             </Show>
