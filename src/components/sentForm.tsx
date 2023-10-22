@@ -4,6 +4,7 @@ export const SentFormJSX = () => {
     const [kategori, setKategori] = createSignal<string>('');
     const [target, setTarget] = createSignal<string>('');
     const [pesan, setPesan] = createSignal<string>('');
+    const [tipe, setTipe] = createSignal<string>('');
     const [destination, setDestination] = createSignal<string>('');
     const [useRandomName, setRandomCondition] = createSignal<boolean>(false);
     const [apiData, setApiData] = createSignal<{
@@ -19,37 +20,61 @@ export const SentFormJSX = () => {
     const submitHandle = () => {
         setApiData({
             loading: true,
+            message: undefined,
         });
-        fetch(`https://kritikapi.sman3palu.sch.id/menfess/${target()}/${destination().trim()}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-            },
-            body: JSON.stringify({message: pesan().trim(), randomName: useRandomName()}),
-        }).then(r => r.json()).then(r => {
-            if (r.message) {
-                setApiData({
-                    error: r.message,
-                    loading: false,
-                });
-                return;
-            }
 
-            if (r.data) {
+        if (kategori() === 'menfess') {
+            fetch(`https://kritikapi.sman3palu.sch.id/menfess/${target()}/${destination().trim()}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
+                body: JSON.stringify({message: pesan().trim(), randomName: useRandomName()}),
+            }).then(r => r.json()).then(r => {
+                if (r.message) {
+                    setApiData({
+                        error: r.message,
+                        loading: false,
+                    });
+                    return;
+                }
+
+                if (r.data) {
+                    setApiData({
+                        loading: false,
+                        error: undefined,
+                        message: `Pesan menfess kepada ${r.data.name} telah diposting ke instagram sman3palu.menfess`,
+                    });
+                    return;
+                }
+            }).catch(e => {
                 setApiData({
                     loading: false,
-                    error: undefined,
-                    message: `Pesan menfess kepada ${r.data.name} telah diposting ke instagram sman3palu.menfess`,
+                    error: (e as Error).message,
                 });
-                return;
-            }
-        }).catch(e => {
-            setApiData({
-                loading: false,
-                error: (e as Error).message,
             });
-        });
+        } else {
+            fetch('https://kritikapi.sman3palu.sch.id/feedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                },
+                body: JSON.stringify({message: pesan().trim(), type: tipe()}),
+            }).then(r => r.json()).then(data => {
+                setApiData({
+                    error: undefined,
+                    loading: false,
+                    message: data.message,
+                });
+            }).catch(e => {
+                setApiData({
+                    loading: false,
+                    error: (e as Error).message,
+                });
+            });
+        }
 
         return;
     }
@@ -129,6 +154,21 @@ export const SentFormJSX = () => {
             }
             {kategori() && (
                 <>
+                    <Show when={kategori() === 'krs'}>
+                        <div class="form-control w-full">
+                            <div class="label">
+                                <span class="label-text">
+                                    Saran atau kritik?
+                                </span>
+                            </div>
+                            <select class="select select-bordered w-full max-w-xs" value={tipe()} onChange={(e) => setTipe(e.target.value)}>
+                                <option value="" disabled selected>Pilih:</option>
+                                <option value="kritik">Saran</option>
+                                <option value="saran">Kritik</option>
+                            </select>
+                        </div>
+                        
+                    </Show>
                     <div class="form-control w-full">
                         <div class="label">
                             <span class="label-text">

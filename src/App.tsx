@@ -8,11 +8,11 @@ function App() {
           <div class="max-w-md">
             <h1 class="text-5xl font-bold">
             <a href="https://ngl.sman3palu.sch.id/" class="hover:text-red-300 text-red-500 uppercase">
-                suara demokrasi
+                smanti bicara
               </a>
             </h1>
             <p class="py-6">
-              Mau menyampaikan suaramu ke seseorang atau saran dan kritik sekolah? Sampaikan disini!
+              Mau menyampaikan suaramu ke seseorang atau saran dan kritik sekolah? Sampaikan disini, silahkan pilih diantara kedua tombol dibawah
             </p>
 
             <SentFormJSX />
