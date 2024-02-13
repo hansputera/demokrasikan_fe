@@ -1,4 +1,5 @@
 import { Show, createSignal } from "solid-js"
+import { twMerge } from "tailwind-merge";
 
 export const SentFormJSX = () => {
     const [kategori, setKategori] = createSignal<string>('');
@@ -8,7 +9,7 @@ export const SentFormJSX = () => {
     const [destination, setDestination] = createSignal<string>('');
     const [useRandomName, setRandomCondition] = createSignal<boolean>(false);
     const [apiData, setApiData] = createSignal<{
-        loading: Boolean;
+        loading: boolean;
         error?: string;
         message?: string;
     }>({
@@ -108,9 +109,9 @@ export const SentFormJSX = () => {
                     {apiData().error}
                 </div>
             </Show>
-
             <Show when={apiData().message}>
-                <div class="alert alert-success text-center">
+                <div class="alert alert-success
+                text-center">
                     {/* <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> */}
                     {apiData().message}
                 </div>
@@ -123,7 +124,7 @@ export const SentFormJSX = () => {
                             <div class="label">
                                 <span class="label-text">Jalur penyampaian:</span>
                             </div>
-                            <select required value={target()} onChange={(e) => setTarget(e.target.value)} name="target" class="select select-bordered w-full">
+                            <select disabled={apiData().loading} required value={target()} onChange={(e) => setTarget(e.target.value)} name="target" class={twMerge("select select-bordered w-full", apiData().loading && 'disabled')}>
                                 <option value=''  disabled selected>Pilih jalur penyampaian:</option>
                                 <option value="wa">WhatsApp</option>
                                 <option value="ig">Instagram</option>
@@ -133,7 +134,7 @@ export const SentFormJSX = () => {
                                 <div class="form-control w-full">
                                     <label for="randomName" class="cursor-pointer label">
                                         <span class="label-text">Nama bebas</span>
-                                        <input type="checkbox" onChange={() => setRandomCondition(!useRandomName())} checked={useRandomName()} class="checkbox checkbox-accent" />
+                                        <input disabled={apiData().loading} type="checkbox" onChange={() => setRandomCondition(!useRandomName())} checked={useRandomName()} class={twMerge("checkbox checkbox-accent", apiData().loading && 'disabled')} />
                                     </label>
                                 </div>
                             </Show>
@@ -145,7 +146,7 @@ export const SentFormJSX = () => {
                                     <div class="label">
                                         <span class="label-text">Destinasi:</span>
                                     </div>
-                                    <input value={destination()} onChange={(e) => setDestination(e.target.value)} required name="destination" type={target() === 'wa' ? 'number' : 'text'} placeholder={`Masukan ${target() === 'wa' ? 'nomor' : 'username'} ${target()?.toUpperCase()} kepada seseorang`} class="input input-bordered w-full" />
+                                    <input disabled={apiData().loading} value={destination()} onChange={(e) => setDestination(e.target.value)} required name="destination" type={target() === 'wa' ? 'number' : 'text'} placeholder={`Masukan ${target() === 'wa' ? 'nomor' : 'username'} ${target()?.toUpperCase()} kepada seseorang`} class={twMerge("input input-bordered w-full", apiData().loading && 'disabled')} />
                                 </div>
                             </>
                         )}
@@ -161,7 +162,7 @@ export const SentFormJSX = () => {
                                     Saran atau kritik?
                                 </span>
                             </div>
-                            <select class="select select-bordered w-full max-w-xs" value={tipe()} onChange={(e) => setTipe(e.target.value)}>
+                            <select class={twMerge("select select-bordered w-full max-w-xs", apiData().loading && 'disabled')} disabled={apiData().loading} value={tipe()} onChange={(e) => setTipe(e.target.value)}>
                                 <option value="" disabled selected>Pilih:</option>
                                 <option value="kritik">Saran</option>
                                 <option value="saran">Kritik</option>
@@ -175,10 +176,10 @@ export const SentFormJSX = () => {
                                 Pesan:
                             </span>
                         </div>
-                        <textarea required minLength={5} maxLength={300} value={pesan()} onChange={(e) => setPesan(e.target.value)} name="message" class="textarea textarea-bordered w-full" placeholder="Apa pesan yang ingin kamu sampaikan?" />
+                        <textarea disabled={apiData().loading} required minLength={5} maxLength={300} value={pesan()} onChange={(e) => setPesan(e.target.value)} name="message" class={twMerge("textarea textarea-bordered w-full", apiData().loading && 'disabled')} placeholder="Apa pesan yang ingin kamu sampaikan?" />
                     </div>
 
-                    <button type="submit" class={`btn btn-accent mt-3 ${apiData().loading ? 'disabled' : ''}`}>
+                    <button type="submit" class={twMerge("btn btn-accent mt-3", apiData().loading && 'disabled')} disabled={apiData().loading ?? false}>
                         <Show when={apiData().loading}>
                             <span class="loading loading-spinner loading-md"></span>
                         </Show>

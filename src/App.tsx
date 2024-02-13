@@ -8,7 +8,7 @@ function App() {
           <div class="max-w-md">
             <h1 class="text-5xl font-bold">
             <a href="https://ngl.sman3palu.sch.id/" class="hover:text-red-300 text-red-500 uppercase">
-                smanti bicara
+                Not Gonna Lie
               </a>
             </h1>
             <p class="py-6">
